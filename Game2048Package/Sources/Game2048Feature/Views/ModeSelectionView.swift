@@ -15,7 +15,7 @@ public struct ModeSelectionView: View {
 
     public var body: some View {
         ZStack {
-            Color(hex: "FAF8EF").ignoresSafeArea()
+            Color(hex: "F5F0FF").ignoresSafeArea()
 
             ScrollView {
                 VStack(spacing: 32) {
@@ -23,11 +23,11 @@ public struct ModeSelectionView: View {
                     VStack(spacing: 8) {
                         Text("2048")
                             .font(.system(size: 64, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65"))
+                            .foregroundColor(Color(hex: "6B5B7A"))
 
                         Text("Choose your challenge")
                             .font(.system(size: 18, weight: .medium, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65").opacity(0.7))
+                            .foregroundColor(Color(hex: "6B5B7A").opacity(0.7))
                     }
                     .padding(.top, 40)
 
@@ -35,7 +35,7 @@ public struct ModeSelectionView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("BOARD SIZE")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65").opacity(0.6))
+                            .foregroundColor(Color(hex: "6B5B7A").opacity(0.6))
 
                         BoardSizePicker(selectedSize: $selectedBoardSize)
                     }
@@ -45,7 +45,7 @@ public struct ModeSelectionView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("GAME MODE")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65").opacity(0.6))
+                            .foregroundColor(Color(hex: "6B5B7A").opacity(0.6))
 
                         ModePicker(selectedMode: $selectedMode)
                     }
@@ -55,7 +55,7 @@ public struct ModeSelectionView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("DIFFICULTY")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65").opacity(0.6))
+                            .foregroundColor(Color(hex: "6B5B7A").opacity(0.6))
 
                         DifficultyPicker(selectedDifficulty: $selectedDifficulty)
                     }
@@ -65,7 +65,7 @@ public struct ModeSelectionView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("TARGET")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65").opacity(0.6))
+                            .foregroundColor(Color(hex: "6B5B7A").opacity(0.6))
 
                         TargetPicker(selectedTarget: $selectedTargetValue)
                     }
@@ -78,7 +78,7 @@ public struct ModeSelectionView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 16)
-                            .background(Color(hex: "8F7A66"))
+                            .background(Color(hex: "B088C0"))
                             .cornerRadius(12)
                     }
                     .padding(.horizontal, 24)
@@ -149,8 +149,8 @@ struct DifficultyCard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(isSelected ? Color(hex: "EDC22E") : Color(hex: "CDC1B4"))
-            .foregroundColor(isSelected ? .white : Color(hex: "776E65"))
+            .background(isSelected ? Color(hex: "FF85A2") : Color(hex: "EDE5F5"))
+            .foregroundColor(isSelected ? .white : Color(hex: "6B5B7A"))
             .cornerRadius(8)
         }
     }
@@ -175,8 +175,8 @@ struct TargetPicker: View {
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(selectedTarget == target ? Color(hex: "EDC22E") : Color(hex: "CDC1B4"))
-                        .foregroundColor(selectedTarget == target ? .white : Color(hex: "776E65"))
+                        .background(selectedTarget == target ? Color(hex: "FF85A2") : Color(hex: "EDE5F5"))
+                        .foregroundColor(selectedTarget == target ? .white : Color(hex: "6B5B7A"))
                         .cornerRadius(8)
                 }
             }

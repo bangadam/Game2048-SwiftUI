@@ -28,7 +28,7 @@ public struct BoardView: View {
         ZStack {
             // Background grid container
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(hex: "BBADA0"))
+                .fill(Color(hex: "E8E0F0"))
                 .frame(width: totalSize, height: totalSize)
 
             // Empty cell placeholders
@@ -37,7 +37,7 @@ public struct BoardView: View {
                     HStack(spacing: spacing) {
                         ForEach(0..<boardSize, id: \.self) { col in
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color(hex: "CDC1B4"))
+                                .fill(Color(hex: "EDE5F5"))
                                 .frame(width: tileSize, height: tileSize)
                         }
                     }

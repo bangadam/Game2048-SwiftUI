@@ -4,6 +4,7 @@ import UIKit
 /// Main game view that contains the board, score, and controls
 public struct GameView: View {
     @State private var game: GameModel
+    @State private var previousScore: Int = 0
     let onBack: (() -> Void)?
 
     public init(configuration: GameConfiguration = .default, onBack: (() -> Void)? = nil) {
@@ -13,7 +14,7 @@ public struct GameView: View {
 
     public var body: some View {
         ZStack {
-            Color(hex: "FAF8EF").ignoresSafeArea()
+            Color(hex: "F5F0FF").ignoresSafeArea()
 
             VStack(spacing: 30) {
                 // Header
@@ -21,11 +22,11 @@ public struct GameView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("2048")
                             .font(.system(size: 48, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65"))
+                            .foregroundColor(Color(hex: "6B5B7A"))
 
                         Text("Join the numbers!")
                             .font(.system(size: 16, weight: .regular, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65"))
+                            .foregroundColor(Color(hex: "6B5B7A"))
                     }
 
                     Spacer()
@@ -50,14 +51,14 @@ public struct GameView: View {
                         Button(action: onBack) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(Color(hex: "776E65"))
+                                .foregroundColor(Color(hex: "6B5B7A"))
                         }
                     }
 
                     if game.moveCount > 0 {
                         Text("Moves: \(game.moveCount)")
                             .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundColor(Color(hex: "776E65"))
+                            .foregroundColor(Color(hex: "6B5B7A"))
                     }
 
                     Spacer()
@@ -118,6 +119,33 @@ public struct GameView: View {
         // Trigger haptics on board change
         .onChange(of: game.board) { _, _ in
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            AudioManager.shared.playSound(.tileMove)
+        }
+        // Play merge sound when score increases
+        .onChange(of: game.score) { oldScore, newScore in
+            if newScore > oldScore {
+                AudioManager.shared.playSound(.tileMerge)
+            }
+            previousScore = newScore
+        }
+        // Play win/game over sounds on status change
+        .onChange(of: game.status) { oldStatus, newStatus in
+            switch newStatus {
+            case .won:
+                AudioManager.shared.playSound(.win)
+            case .gameOver:
+                AudioManager.shared.playSound(.gameOver)
+            default:
+                break
+            }
+        }
+        // Start background music when view appears
+        .onAppear {
+            AudioManager.shared.playBackgroundMusic()
+        }
+        // Stop background music when view disappears
+        .onDisappear {
+            AudioManager.shared.stopBackgroundMusic()
         }
         // Keyboard control for iPad and Simulator
         .focusable()
@@ -165,7 +193,7 @@ struct ActionButton: View {
             .foregroundColor(.white)
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(Color(hex: "8F7A66"))
+            .background(Color(hex: "B088C0"))
             .cornerRadius(8)
         }
     }
@@ -179,7 +207,7 @@ struct OverlayView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "EDC22E").opacity(0.5)
+            Color(hex: "FF85A2").opacity(0.5)
                 .ignoresSafeArea()
                 .background(.ultraThinMaterial)
 
@@ -196,7 +224,7 @@ struct OverlayView: View {
                 Button(action: action) {
                     Text(buttonTitle)
                         .font(.system(size: 20, weight: .bold, design: .rounded))
-                        .foregroundColor(Color(hex: "776E65"))
+                        .foregroundColor(Color(hex: "6B5B7A"))
                         .padding(.horizontal, 24)
                         .padding(.vertical, 12)
                         .background(Color.white)
@@ -225,7 +253,7 @@ struct TimerView: View {
         } else if seconds <= 30 {
             return .orange
         }
-        return Color(hex: "776E65")
+        return Color(hex: "6B5B7A")
     }
 
     var body: some View {
@@ -250,7 +278,7 @@ struct MoveCounterView: View {
         } else if moves <= 10 {
             return .orange
         }
-        return Color(hex: "776E65")
+        return Color(hex: "6B5B7A")
     }
 
     var body: some View {

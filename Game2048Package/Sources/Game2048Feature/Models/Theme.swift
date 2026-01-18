@@ -23,7 +23,7 @@ public enum Theme: String, Sendable, CaseIterable {
     public var backgroundColor: Color {
         switch self {
         case .classic:
-            return Color(hex: "FAF8EF")
+            return Color(hex: "F5F0FF")  // Soft lavender
         case .dark:
             return Color(hex: "1A1A2E")
         case .ocean:
@@ -36,7 +36,7 @@ public enum Theme: String, Sendable, CaseIterable {
     public var boardColor: Color {
         switch self {
         case .classic:
-            return Color(hex: "BBADA0")
+            return Color(hex: "E8E0F0")  // Muted lavender-gray
         case .dark:
             return Color(hex: "16213E")
         case .ocean:
@@ -49,7 +49,7 @@ public enum Theme: String, Sendable, CaseIterable {
     public var emptyTileColor: Color {
         switch self {
         case .classic:
-            return Color(hex: "CDC1B4")
+            return Color(hex: "EDE5F5")  // Light purple-tint
         case .dark:
             return Color(hex: "0F3460")
         case .ocean:
@@ -62,7 +62,7 @@ public enum Theme: String, Sendable, CaseIterable {
     public var textColor: Color {
         switch self {
         case .classic:
-            return Color(hex: "776E65")
+            return Color(hex: "6B5B7A")  // Dusty purple
         case .dark:
             return Color.white
         case .ocean:

@@ -64,23 +64,23 @@ public struct TileView: View {
     }
 
     private var textColor: Color {
-        tile.value <= 4 ? Color(red: 0.47, green: 0.43, blue: 0.40) : .white
+        tile.value >= 2048 ? .white : Color(hex: "6B5B7A")
     }
 
     private var backgroundColor: Color {
         switch tile.value {
-        case 2: return Color(hex: "EEE4DA")
-        case 4: return Color(hex: "EDE0C8")
-        case 8: return Color(hex: "F2B179")
-        case 16: return Color(hex: "F59563")
-        case 32: return Color(hex: "F67C5F")
-        case 64: return Color(hex: "F65E3B")
-        case 128: return Color(hex: "EDCF72")
-        case 256: return Color(hex: "EDCC61")
-        case 512: return Color(hex: "EDC850")
-        case 1024: return Color(hex: "EDC53F")
-        case 2048: return Color(hex: "EDC22E")
-        default: return Color(hex: "3C3A32")
+        case 2: return Color(hex: "FFD6E0")    // Soft Pink
+        case 4: return Color(hex: "FFE4CC")    // Peachy
+        case 8: return Color(hex: "FFF3B8")    // Butter Yellow
+        case 16: return Color(hex: "C8F7DC")   // Mint Green
+        case 32: return Color(hex: "B8F0F0")   // Aqua
+        case 64: return Color(hex: "B8E0FF")   // Sky Blue
+        case 128: return Color(hex: "C5C8FF")  // Periwinkle
+        case 256: return Color(hex: "E0C8FF")  // Lavender
+        case 512: return Color(hex: "F0B8E8")  // Orchid
+        case 1024: return Color(hex: "FFB8C8") // Coral
+        case 2048: return Color(hex: "FF85A2") // Hot Pink
+        default: return Color(hex: "8B6B99")   // Deep Purple
         }
     }
 }

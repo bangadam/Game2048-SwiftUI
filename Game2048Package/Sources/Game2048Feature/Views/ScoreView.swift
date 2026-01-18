@@ -14,7 +14,7 @@ public struct ScoreView: View {
         VStack(spacing: 0) {
             Text(title)
                 .font(.system(size: 11, weight: .bold, design: .rounded))
-                .foregroundColor(Color(hex: "EEE4DA"))
+                .foregroundColor(Color(hex: "E8E0F0"))
                 .padding(.bottom, 2)
 
             Text("\(score)")
@@ -24,7 +24,7 @@ public struct ScoreView: View {
         .frame(minWidth: 60)
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .background(Color(hex: "BBADA0"))
+        .background(Color(hex: "DED0E8"))
         .cornerRadius(6)
     }
 }

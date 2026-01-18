@@ -39,8 +39,8 @@ struct BoardSizeCard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(isSelected ? Color(hex: "EDC22E") : Color(hex: "CDC1B4"))
-            .foregroundColor(isSelected ? .white : Color(hex: "776E65"))
+            .background(isSelected ? Color(hex: "FF85A2") : Color(hex: "EDE5F5"))
+            .foregroundColor(isSelected ? .white : Color(hex: "6B5B7A"))
             .cornerRadius(12)
             .scaleEffect(isSelected ? 1.05 : 1.0)
         }
@@ -61,7 +61,7 @@ struct MiniGridPreview: View {
                 HStack(spacing: 2) {
                     ForEach(0..<size, id: \.self) { _ in
                         RoundedRectangle(cornerRadius: 2)
-                            .fill(isSelected ? Color.white.opacity(0.5) : Color(hex: "BBADA0"))
+                            .fill(isSelected ? Color.white.opacity(0.5) : Color(hex: "E8E0F0"))
                             .frame(width: cellSize, height: cellSize)
                     }
                 }
@@ -73,5 +73,5 @@ struct MiniGridPreview: View {
 #Preview {
     BoardSizePicker(selectedSize: .constant(4))
         .padding()
-        .background(Color(hex: "FAF8EF"))
+        .background(Color(hex: "F5F0FF"))
 }

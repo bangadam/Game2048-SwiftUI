@@ -1,13 +1,21 @@
 import SwiftUI
 
-/// Root view that manages navigation between mode selection and gameplay
+/// Root view that manages navigation between onboarding, mode selection and gameplay
 public struct RootView: View {
+    @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var currentConfiguration: GameConfiguration?
 
     public init() {}
 
     public var body: some View {
-        if let configuration = currentConfiguration {
+        if !hasSeenOnboarding {
+            OnboardingView {
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    hasSeenOnboarding = true
+                }
+            }
+            .transition(.opacity)
+        } else if let configuration = currentConfiguration {
             GameView(configuration: configuration) {
                 withAnimation(.easeInOut(duration: 0.3)) {
                     currentConfiguration = nil

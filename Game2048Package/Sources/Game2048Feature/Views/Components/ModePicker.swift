@@ -90,8 +90,8 @@ struct ModeCard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .background(isSelected ? Color(hex: "EDC22E") : Color(hex: "CDC1B4"))
-            .foregroundColor(isSelected ? .white : Color(hex: "776E65"))
+            .background(isSelected ? Color(hex: "FF85A2") : Color(hex: "EDE5F5"))
+            .foregroundColor(isSelected ? .white : Color(hex: "6B5B7A"))
             .cornerRadius(12)
             .scaleEffect(isSelected ? 1.02 : 1.0)
         }
@@ -101,5 +101,5 @@ struct ModeCard: View {
 #Preview {
     ModePicker(selectedMode: .constant(.classic))
         .padding()
-        .background(Color(hex: "FAF8EF"))
+        .background(Color(hex: "F5F0FF"))
 }
