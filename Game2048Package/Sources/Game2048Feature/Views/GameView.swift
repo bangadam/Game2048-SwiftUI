@@ -5,6 +5,7 @@ import UIKit
 public struct GameView: View {
     @State private var game: GameModel
     @State private var previousScore: Int = 0
+    @State private var showMusicPicker = false
     let onBack: (() -> Void)?
 
     public init(configuration: GameConfiguration = .default, onBack: (() -> Void)? = nil) {
@@ -62,6 +63,8 @@ public struct GameView: View {
                     }
 
                     Spacer()
+
+                    MusicButton(showPicker: $showMusicPicker)
 
                     ActionButton(icon: "arrow.counterclockwise", title: "New Game") {
                         withAnimation {
@@ -291,6 +294,36 @@ struct MoveCounterView: View {
         .foregroundColor(urgencyColor)
         .padding(.horizontal, 24)
         .animation(.easeInOut(duration: 0.3), value: moves <= 3)
+    }
+}
+
+struct MusicButton: View {
+    @Binding var showPicker: Bool
+
+    var body: some View {
+        Menu {
+            ForEach(MusicTrack.allCases, id: \.self) { track in
+                Button {
+                    AudioManager.shared.currentTrack = track
+                } label: {
+                    Label {
+                        Text(track.displayName)
+                    } icon: {
+                        Image(systemName: track.icon)
+                    }
+                    if AudioManager.shared.currentTrack == track {
+                        Image(systemName: "checkmark")
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: AudioManager.shared.currentTrack == .none ? "speaker.slash" : "music.note")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(.white)
+                .frame(width: 40, height: 40)
+                .background(Color(hex: "B088C0"))
+                .cornerRadius(8)
+        }
     }
 }
 

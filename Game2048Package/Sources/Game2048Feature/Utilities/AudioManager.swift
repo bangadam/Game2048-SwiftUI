@@ -8,6 +8,26 @@ public enum SoundEffect: String, CaseIterable {
     case gameOver = "game_over"
 }
 
+/// Available music tracks for background music
+public enum MusicTrack: String, CaseIterable, Sendable {
+    case chill = "background_music"
+    case none = "none"
+
+    public var displayName: String {
+        switch self {
+        case .chill: return "Chill"
+        case .none: return "No Music"
+        }
+    }
+
+    public var icon: String {
+        switch self {
+        case .chill: return "music.note"
+        case .none: return "speaker.slash"
+        }
+    }
+}
+
 /// Singleton manager for background music and sound effects
 /// Uses AVFoundation for audio playback with proper iOS audio session handling
 @MainActor
@@ -32,6 +52,18 @@ public final class AudioManager: Sendable {
         }
     }
 
+    /// Current music track (persisted in UserDefaults)
+    public var currentTrack: MusicTrack {
+        didSet {
+            UserDefaults.standard.set(currentTrack.rawValue, forKey: "currentMusicTrack")
+            if currentTrack == .none {
+                stopBackgroundMusic()
+            } else {
+                switchToTrack(currentTrack)
+            }
+        }
+    }
+
     // MARK: - Private Properties
 
     private var musicPlayer: AVAudioPlayer?
@@ -43,9 +75,11 @@ public final class AudioManager: Sendable {
         // Load persisted settings (default to true if not set)
         let storedMusicEnabled = UserDefaults.standard.object(forKey: "isMusicEnabled")
         let storedSoundEnabled = UserDefaults.standard.object(forKey: "isSoundEnabled")
+        let storedTrack = UserDefaults.standard.string(forKey: "currentMusicTrack")
 
         self.isMusicEnabled = (storedMusicEnabled as? Bool) ?? true
         self.isSoundEnabled = (storedSoundEnabled as? Bool) ?? true
+        self.currentTrack = MusicTrack(rawValue: storedTrack ?? "") ?? .chill
 
         setupAudioSession()
         preloadSounds()
@@ -70,15 +104,28 @@ public final class AudioManager: Sendable {
     /// Starts playing background music in a loop
     public func playBackgroundMusic() {
         guard isMusicEnabled else { return }
+        guard currentTrack != .none else { return }
         guard musicPlayer == nil || !(musicPlayer?.isPlaying ?? false) else { return }
 
+        playTrack(currentTrack)
+    }
+
+    /// Switches to a different music track
+    private func switchToTrack(_ track: MusicTrack) {
+        stopBackgroundMusic()
+        guard isMusicEnabled && track != .none else { return }
+        playTrack(track)
+    }
+
+    /// Plays a specific track
+    private func playTrack(_ track: MusicTrack) {
         // Try mp3 first, then m4a
-        var url = Bundle.module.url(forResource: "background_music", withExtension: "mp3")
+        var url = Bundle.module.url(forResource: track.rawValue, withExtension: "mp3")
         if url == nil {
-            url = Bundle.module.url(forResource: "background_music", withExtension: "m4a")
+            url = Bundle.module.url(forResource: track.rawValue, withExtension: "m4a")
         }
         guard let musicUrl = url else {
-            print("AudioManager: Background music file not found")
+            print("AudioManager: Music file \(track.rawValue) not found")
             return
         }
 
@@ -89,7 +136,7 @@ public final class AudioManager: Sendable {
             musicPlayer?.prepareToPlay()
             musicPlayer?.play()
         } catch {
-            print("AudioManager: Failed to play background music - \(error.localizedDescription)")
+            print("AudioManager: Failed to play music - \(error.localizedDescription)")
         }
     }
 
