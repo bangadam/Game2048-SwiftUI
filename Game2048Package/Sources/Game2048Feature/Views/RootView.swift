@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Root view that manages navigation between onboarding, mode selection and gameplay
+/// Root view that manages navigation between onboarding, start screen, and gameplay
 public struct RootView: View {
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding = false
     @State private var currentConfiguration: GameConfiguration?

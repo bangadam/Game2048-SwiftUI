@@ -38,13 +38,6 @@ public struct GameView: View {
                 }
                 .padding(.horizontal, 24)
 
-                // Mode-specific indicators (Timer / Move Counter)
-                if let remainingTime = game.remainingTime {
-                    TimerView(seconds: remainingTime)
-                } else if let remainingMoves = game.remainingMoves {
-                    MoveCounterView(moves: remainingMoves)
-                }
-
                 // Controls
                 HStack {
                     if let onBack = onBack {
@@ -53,12 +46,6 @@ public struct GameView: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(Color(hex: "6B5B7A"))
                         }
-                    }
-
-                    if game.moveCount > 0 {
-                        Text("Moves: \(game.moveCount)")
-                            .font(.system(size: 14, weight: .medium, design: .rounded))
-                            .foregroundColor(Color(hex: "6B5B7A"))
                     }
 
                     Spacer()
@@ -102,18 +89,6 @@ public struct GameView: View {
                         }
                     }
                 )
-            }
-        }
-        // Timer for timed mode
-        .task(id: game.status) {
-            guard case .timed = game.configuration.mode else { return }
-            guard game.status == .playing else { return }
-
-            while !Task.isCancelled && game.status == .playing {
-                try? await Task.sleep(for: .seconds(1))
-                if !Task.isCancelled && game.status == .playing {
-                    game.decrementTimer()
-                }
             }
         }
         // Trigger haptics on board change
@@ -235,62 +210,6 @@ struct OverlayView: View {
             .padding()
             .transition(.scale.combined(with: .opacity))
         }
-    }
-}
-
-struct TimerView: View {
-    let seconds: Int
-
-    private var timeString: String {
-        let mins = seconds / 60
-        let secs = seconds % 60
-        return String(format: "%d:%02d", mins, secs)
-    }
-
-    private var urgencyColor: Color {
-        if seconds <= 10 {
-            return .red
-        } else if seconds <= 30 {
-            return .orange
-        }
-        return Color(hex: "6B5B7A")
-    }
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "timer")
-                .font(.system(size: 18, weight: .bold))
-            Text(timeString)
-                .font(.system(size: 24, weight: .bold, design: .monospaced))
-        }
-        .foregroundColor(urgencyColor)
-        .padding(.horizontal, 24)
-        .animation(.easeInOut(duration: 0.3), value: seconds <= 10)
-    }
-}
-
-struct MoveCounterView: View {
-    let moves: Int
-
-    private var urgencyColor: Color {
-        if moves <= 3 {
-            return .red
-        } else if moves <= 10 {
-            return .orange
-        }
-        return Color(hex: "6B5B7A")
-    }
-
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "arrow.up.arrow.down")
-                .font(.system(size: 18, weight: .bold))
-            Text("\(moves) moves left")
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-        }
-        .foregroundColor(urgencyColor)
-        .padding(.horizontal, 24)
-        .animation(.easeInOut(duration: 0.3), value: moves <= 3)
     }
 }
 

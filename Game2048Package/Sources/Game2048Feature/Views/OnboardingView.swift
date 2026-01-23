@@ -5,7 +5,7 @@ public struct OnboardingView: View {
     @State private var currentPage = 0
     let onComplete: () -> Void
 
-    private let totalPages = 4
+    private let totalPages = 3
 
     public init(onComplete: @escaping () -> Void) {
         self.onComplete = onComplete
@@ -37,11 +37,8 @@ public struct OnboardingView: View {
                     HowToPlayPage()
                         .tag(1)
 
-                    GoalPage()
+                    GoalPage(onGetStarted: completeOnboarding)
                         .tag(2)
-
-                    GameModesPage(onGetStarted: completeOnboarding)
-                        .tag(3)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .animation(.easeInOut, value: currentPage)
@@ -170,6 +167,8 @@ private struct HowToPlayPage: View {
 }
 
 private struct GoalPage: View {
+    let onGetStarted: () -> Void
+
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
@@ -202,30 +201,6 @@ private struct GoalPage: View {
                 .padding(.horizontal, 40)
 
             Spacer()
-        }
-    }
-}
-
-private struct GameModesPage: View {
-    let onGetStarted: () -> Void
-
-    var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            Text("Game Modes")
-                .font(.system(size: 32, weight: .bold, design: .rounded))
-                .foregroundColor(Color(hex: "6B5B7A"))
-
-            VStack(alignment: .leading, spacing: 16) {
-                ModeRow(icon: "infinity", title: "Classic", description: "No time limit, play at your pace")
-                ModeRow(icon: "timer", title: "Timed", description: "Race against the clock")
-                ModeRow(icon: "arrow.up.arrow.down", title: "Limited Moves", description: "Strategic play with limited moves")
-                ModeRow(icon: "leaf.fill", title: "Zen", description: "Relaxed mode, no win or lose")
-            }
-            .padding(.horizontal, 40)
-
-            Spacer()
 
             Button(action: onGetStarted) {
                 Text("Get Started")
@@ -240,31 +215,6 @@ private struct GameModesPage: View {
             .padding(.bottom, 20)
 
             Spacer()
-        }
-    }
-}
-
-private struct ModeRow: View {
-    let icon: String
-    let title: String
-    let description: String
-
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundColor(Color(hex: "B088C0"))
-                .frame(width: 32)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(title)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundColor(Color(hex: "6B5B7A"))
-
-                Text(description)
-                    .font(.system(size: 14, weight: .regular, design: .rounded))
-                    .foregroundColor(Color(hex: "6B5B7A").opacity(0.7))
-            }
         }
     }
 }

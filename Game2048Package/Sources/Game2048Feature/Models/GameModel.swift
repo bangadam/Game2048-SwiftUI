@@ -14,15 +14,6 @@ public final class GameModel: Sendable {
     public private(set) var status: GameStatus
     public let configuration: GameConfiguration
 
-    /// Remaining time for timed mode (nil for other modes)
-    public private(set) var remainingTime: Int?
-
-    /// Remaining moves for limited moves mode (nil for other modes)
-    public private(set) var remainingMoves: Int?
-
-    /// Total moves made in this game
-    public private(set) var moveCount: Int = 0
-
     /// History of game states for undo functionality
     private var history: [GameState] = []
 
@@ -56,19 +47,9 @@ public final class GameModel: Sendable {
         self.highScore = UserDefaults.standard.integer(forKey: "highScore")
         self.status = .playing
 
-        // Initialize mode-specific properties
-        switch configuration.mode {
-        case .timed(let seconds):
-            self.remainingTime = seconds
-        case .limitedMoves(let count):
-            self.remainingMoves = count
-        default:
-            break
-        }
-
         // Start with two tiles
-        spawnTileWithDifficulty()
-        spawnTileWithDifficulty()
+        spawnTile()
+        spawnTile()
     }
 
     // MARK: - Game Actions
@@ -92,15 +73,6 @@ public final class GameModel: Sendable {
             return
         }
 
-        // Update move count
-        moveCount += 1
-
-        // Decrement remaining moves if in limited moves mode
-        if var moves = remainingMoves {
-            moves -= 1
-            remainingMoves = moves
-        }
-
         // Update score
         score += result.scoreGained
         if score > highScore {
@@ -109,7 +81,7 @@ public final class GameModel: Sendable {
         }
 
         // Spawn a new tile
-        spawnTileWithDifficulty()
+        spawnTile()
 
         // Check game status
         updateGameStatus()
@@ -121,35 +93,10 @@ public final class GameModel: Sendable {
         score = 0
         status = .playing
         history.removeAll()
-        moveCount = 0
-
-        // Reset mode-specific properties
-        switch configuration.mode {
-        case .timed(let seconds):
-            remainingTime = seconds
-        case .limitedMoves(let count):
-            remainingMoves = count
-        default:
-            break
-        }
 
         // Start with two tiles
-        spawnTileWithDifficulty()
-        spawnTileWithDifficulty()
-    }
-
-    /// Decrements the timer (called externally by a timer)
-    public func decrementTimer() {
-        guard case .timed = configuration.mode else { return }
-        guard status == .playing else { return }
-
-        if var time = remainingTime {
-            time -= 1
-            remainingTime = time
-            if time <= 0 {
-                status = .gameOver
-            }
-        }
+        spawnTile()
+        spawnTile()
     }
 
     /// Undoes the last move
@@ -180,27 +127,13 @@ public final class GameModel: Sendable {
         }
     }
 
-    /// Spawns a tile using the configured difficulty's spawn probability
-    private func spawnTileWithDifficulty() {
-        let probability = configuration.difficulty.twoSpawnProbability
-        board.spawnRandomTile(twoSpawnProbability: probability)
+    /// Spawns a tile with standard probability (90% chance for 2, 10% for 4)
+    private func spawnTile() {
+        board.spawnRandomTile(twoSpawnProbability: 0.9)
     }
 
     private func updateGameStatus() {
         let targetValue = configuration.targetValue
-
-        // In zen mode, never win or lose
-        if case .zen = configuration.mode {
-            return
-        }
-
-        // Check for limited moves game over
-        if let moves = remainingMoves, moves <= 0 {
-            if board.maxTileValue < targetValue {
-                status = .gameOver
-            }
-            return
-        }
 
         // Check for win (only if not already won and continued)
         if board.maxTileValue >= targetValue && status != .playing {
